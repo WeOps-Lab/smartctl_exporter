@@ -218,7 +218,7 @@ func main() {
 	reg := prometheus.NewPedanticRegistry()
 	reg.MustRegister(
 		collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}),
-		collectors.NewGoCollector(),
+		//collectors.NewGoCollector(),
 	)
 
 	prometheus.WrapRegistererWithPrefix("", reg).MustRegister(&collector)
