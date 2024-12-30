@@ -93,7 +93,7 @@ func (i *SMARTctlManagerCollector) RescanForDevices() {
 var (
 	smartctlPath = kingpin.Flag("smartctl.path",
 		"The path to the smartctl binary",
-	).Default("/usr/sbin/smartctl").String()
+	).Envar("smartctlPath").Default("/usr/sbin/smartctl").String()
 	smartctlInterval = kingpin.Flag("smartctl.interval",
 		"The interval between smartctl polls",
 	).Default("60s").Duration()
@@ -103,19 +103,19 @@ var (
 	smartctlScan    = kingpin.Flag("smartctl.scan", "Enable scanning. This is a default if no devices are specified").Default("false").Bool()
 	smartctlDevices = kingpin.Flag("smartctl.device",
 		"The device to monitor. Device type can be specified after a semicolon, eg. '/dev/bus/0;megaraid,1' (repeatable)",
-	).Strings()
+	).Envar("smartctlDevices").Strings()
 	smartctlDeviceExclude = kingpin.Flag(
 		"smartctl.device-exclude",
 		"Regexp of devices to exclude from automatic scanning. (mutually exclusive to device-include)",
-	).Default("").String()
+	).Envar("smartctlDeviceExclude").Default("").String()
 	smartctlDeviceInclude = kingpin.Flag(
 		"smartctl.device-include",
 		"Regexp of devices to exclude from automatic scanning. (mutually exclusive to device-exclude)",
-	).Default("").String()
+	).Envar("smartctlDeviceInclude").Default("").String()
 	smartctlScanDeviceTypes = kingpin.Flag(
 		"smartctl.scan-device-type",
 		"Device type to use during automatic scan. Special by-id value forces predictable device names. (repeatable)",
-	).Strings()
+	).Envar("smartctlScanDeviceTypes").Strings()
 	smartctlFakeData = kingpin.Flag("smartctl.fake-data",
 		"The device to monitor (repeatable)",
 	).Default("false").Hidden().Bool()
