@@ -114,8 +114,8 @@ var (
 	).Envar("smartctlDeviceInclude").Default("").String()
 	smartctlScanDeviceTypes = kingpin.Flag(
 		"smartctl.scan-device-type",
-		"Device type to use during automatic scan. Special by-id value forces predictable device names. (repeatable)",
-	).Envar("smartctlScanDeviceTypes").Strings()
+		"Device type to use during automatic scan. Special by-id value forces predictable device names. (use , to split multiple types)",
+	).Envar("smartctlScanDeviceTypes").String()
 	smartctlFakeData = kingpin.Flag("smartctl.fake-data",
 		"The device to monitor (repeatable)",
 	).Default("false").Hidden().Bool()

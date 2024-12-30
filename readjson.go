@@ -82,9 +82,13 @@ func readSMARTctl(logger *slog.Logger, device Device) (gjson.Result, bool) {
 func readSMARTctlDevices(logger *slog.Logger) gjson.Result {
 	logger.Debug("Scanning for devices")
 	var scanArgs []string = []string{"--json", "--scan"}
-	for _, d := range *smartctlScanDeviceTypes {
-		scanArgs = append(scanArgs, "--device", d)
+
+	if *smartctlScanDeviceTypes != "" {
+		for _, d := range strings.Split(*smartctlScanDeviceTypes, ",") {
+			scanArgs = append(scanArgs, "--device", d)
+		}
 	}
+
 	out, err := exec.Command(*smartctlPath, scanArgs...).Output()
 	if exiterr, ok := err.(*exec.ExitError); ok {
 		logger.Debug("Exit Status", "exit_code", exiterr.ExitCode())
