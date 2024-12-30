@@ -102,8 +102,8 @@ var (
 	).Default("10m").Duration()
 	smartctlScan    = kingpin.Flag("smartctl.scan", "Enable scanning. This is a default if no devices are specified").Default("false").Bool()
 	smartctlDevices = kingpin.Flag("smartctl.device",
-		"The device to monitor. Device type can be specified after a semicolon, eg. '/dev/bus/0;megaraid,1' (repeatable)",
-	).Envar("smartctlDevices").Strings()
+		"The device to monitor. Device type can be specified after a semicolon, eg. '/dev/bus/0;megaraid,1' (use , to split multiple device)",
+	).Envar("smartctlDevices").String()
 	smartctlDeviceExclude = kingpin.Flag(
 		"smartctl.device-exclude",
 		"Regexp of devices to exclude from automatic scanning. (mutually exclusive to device-include)",
@@ -155,7 +155,7 @@ func scanDevices(logger *slog.Logger) []Device {
 
 func buildDevicesFromFlag(devices []Device) []Device {
 	// TODO: deduplication?
-	for _, device := range *smartctlDevices {
+	for _, device := range strings.Split(*smartctlDevices, ",") {
 		deviceName, deviceType, _ := strings.Cut(device, ";")
 		if deviceType == "" {
 			deviceType = "auto"
@@ -198,7 +198,7 @@ func main() {
 	}
 
 	if len(*smartctlDevices) > 0 {
-		logger.Info("Devices specified", "devices", strings.Join(*smartctlDevices, ", "))
+		logger.Info("Devices specified", "devices", smartctlDevices)
 		devices = buildDevicesFromFlag(devices)
 		logger.Info("Devices filtered", "count", len(devices))
 	}
